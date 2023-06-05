@@ -92,6 +92,6 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('lavila narrator demo')
     parser.add_argument('--cuda', action='store_true', help='use cuda')
-    parser.add_argument('--video-path', default='assets/3c0dffd0-e38e-4643-bc48-d513943dc20b_012_014.mp4', type=str, help='video path')
+    parser.add_argument('--video-path', default=r'D:\DATA\COLLECTED\PTG\ANNOTATION\ANNOTATION\12_2_360p.mp4', type=str, help='video path')
     args = parser.parse_args()
     main(args)
