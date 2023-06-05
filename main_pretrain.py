@@ -23,8 +23,8 @@ import torchvision.transforms._transforms_video as transforms_video
 import wandb
 
 from eval_zeroshot import get_similarity_matrix
-from lavila.data import datasets
-from lavila.data.video_transforms import Permute
+from benchmarks.zero_shot_error_detection.lavila.lavila.data import datasets
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute
 from lavila.models import models
 from lavila.utils.meter import AverageMeter, ProgressMeter
 from lavila.utils import distributed as dist_utils

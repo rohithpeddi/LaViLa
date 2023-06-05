@@ -16,8 +16,8 @@ import torchvision.transforms as transforms
 import torchvision.transforms._transforms_video as transforms_video
 from sklearn.metrics import confusion_matrix
 
-from lavila.data import datasets
-from lavila.data.video_transforms import Permute, SpatialCrop, TemporalCrop
+from benchmarks.zero_shot_error_detection.lavila.lavila.data import datasets
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute, SpatialCrop, TemporalCrop
 from lavila.models import models
 from lavila.models.utils import inflate_positional_embeds
 from lavila.utils import distributed as dist_utils

@@ -16,8 +16,8 @@ import torch
 import torchvision.transforms as transforms
 import torchvision.transforms._transforms_video as transforms_video
 
-from lavila.data import datasets
-from lavila.data.video_transforms import Permute
+from benchmarks.zero_shot_error_detection.lavila.lavila.data import datasets
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute
 from lavila.models import models
 from lavila.utils.preprocess import generate_tokenizer
 from lavila.utils import distributed as dist_utils

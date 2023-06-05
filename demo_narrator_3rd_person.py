@@ -15,8 +15,8 @@ import torchvision.transforms as transforms
 import torchvision.transforms._transforms_video as transforms_video
 import decord
 
-from lavila.data.video_transforms import Permute
-from lavila.data.datasets import get_frame_ids, video_loader_by_frames
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.datasets import get_frame_ids, video_loader_by_frames
 from lavila.models.models import VCLM_OPENAI_TIMESFORMER_LARGE_GPT2_XL
 from lavila.models.tokenizer import MyGPT2Tokenizer
 from eval_narrator import decode_one

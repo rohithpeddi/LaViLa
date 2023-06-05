@@ -6,7 +6,7 @@
 
 import torch
 import torch.distributed as dist
-from lavila.utils import distributed as dist_utils
+import distributed as dist_utils
 
 
 class AverageMeter(object):

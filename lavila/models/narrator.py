@@ -23,9 +23,9 @@ from transformers.generation.logits_process import (
     LogitNormalization,
 )
 
-from lavila.models.coca import CrossAttention, LayerNorm
-from lavila.models.openai_model import VisionTransformer
-from lavila.models.timesformer import SpaceTimeTransformer
+from ..models.coca import CrossAttention, LayerNorm
+from ..models.openai_model import VisionTransformer
+from ..models.timesformer import SpaceTimeTransformer
 
 
 class VCLM_HF(nn.Module):

@@ -23,8 +23,8 @@ import torchvision.transforms as transforms
 import torchvision.transforms._transforms_video as transforms_video
 import wandb
 
-from lavila.data import datasets
-from lavila.data.video_transforms import Permute
+from benchmarks.zero_shot_error_detection.lavila.lavila.data import datasets
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute
 from lavila.models import models, loss
 from lavila.models.tokenizer import (MyBertTokenizer, MyDistilBertTokenizer, MyGPT2Tokenizer, SimpleTokenizer)
 from lavila.models.utils import inflate_positional_embeds

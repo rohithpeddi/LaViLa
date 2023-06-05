@@ -15,8 +15,8 @@ import torchvision.transforms as transforms
 import torchvision.transforms._transforms_video as transforms_video
 import decord
 
-from lavila.data.video_transforms import Permute
-from lavila.data.datasets import get_frame_ids, video_loader_by_frames
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute
+from benchmarks.zero_shot_error_detection.lavila.lavila.data.datasets import get_frame_ids, video_loader_by_frames
 from lavila.models.models import VCLM_OPENAI_TIMESFORMER_LARGE_336PX_GPT2_XL
 from lavila.models.tokenizer import MyGPT2Tokenizer
 from eval_narrator import decode_one
@@ -77,7 +77,7 @@ def main(args):
             tokenizer,
             target=None,  # free-form generation
             max_text_length=77,
-            top_k=None,
+            top_k=num_seg,
             top_p=0.95,   # nucleus sampling
             num_return_sequences=10,  # number of candidates: 10
             temperature=0.7,
@@ -92,6 +92,6 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('lavila narrator demo')
     parser.add_argument('--cuda', action='store_true', help='use cuda')
-    parser.add_argument('--video-path', default=r'D:\DATA\COLLECTED\PTG\ANNOTATION\ANNOTATION\12_2_360p.mp4', type=str, help='video path')
+    parser.add_argument('--video-path', default='/home/rxp190007/DATA/ANNOTATION/12_2/12_2_360p_spliced/output.mp4', type=str, help='video path')
     args = parser.parse_args()
     main(args)
