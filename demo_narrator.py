@@ -61,63 +61,67 @@ def main(args):
                                         std=[68.5005327, 66.6321579, 70.32316305])
     ])
 
-    video_path = os.path.join(args.input_directory_path, f'{args.recording_id}_360p.mp4')
-    if os.path.exists(video_path):
-        print(f'video path: {video_path} exists')
-    else:
-        print(f'video path: {video_path} does not exist')
-        video_path = os.path.join(args.input_directory_path, f'{args.recording_id}_360p.MP4')
-    narrations = []
-    vr = decord.VideoReader(video_path)
-    total_frames = len(vr)
-    num_segments = 4
-    num_return_sequences = 10
-    total_iterations = total_frames // 60
+    activity_id = args.activity_id
+    for file in os.listdir(args.input_directory_path):
+        if file.startswith(activity_id):
+            video_file = file
+            video_path = os.path.join(args.input_directory_path, video_file)
+            print('-----------------------------------------------')
+            print('processing {}'.format(video_file))
 
-    os.makedirs(args.output_directory_path, exist_ok=True)
-    output_path = os.path.join(args.output_directory_path, f'{args.recording_id}.txt')
-    for iteration in range(total_iterations):
-        print('iteration {}/{}'.format(iteration, total_iterations))
-        frame_ids = get_frame_ids(iteration * 60, min((iteration + 1) * 60, total_frames), num_segments=num_segments,
-                                  jitter=False)
-        frames = video_loader_by_frames('./', video_path, frame_ids)
+            recording_id = video_file.split('_')[0] + '_' + video_file.split('_')[1]
 
-        frames = val_transform(frames)
-        frames = frames.unsqueeze(0)  # fake a batch dimension
+            narrations = []
+            vr = decord.VideoReader(video_path)
+            total_frames = len(vr)
+            num_segments = 4
+            num_return_sequences = 10
+            total_iterations = total_frames // 60
 
-        tokenizer = MyGPT2Tokenizer('gpt2-xl', add_bos=True)
-        with torch.no_grad():
-            if args.cuda:
-                frames = frames.cuda(non_blocking=True)
-            image_features = model.encode_image(frames)
-            generated_text_ids, ppls = model.generate(
-                image_features,
-                tokenizer,
-                target=None,  # free-form generation
-                max_text_length=77,
-                top_k=None,
-                top_p=0.95,  # nucleus sampling
-                num_return_sequences=num_return_sequences,  # number of candidates: 10
-                temperature=0.7,
-                early_stopping=True,
-            )
+            os.makedirs(args.output_directory_path, exist_ok=True)
+            output_path = os.path.join(args.output_directory_path, f'{recording_id}.txt')
+            for iteration in range(total_iterations):
+                print('iteration {}/{}'.format(iteration, total_iterations))
+                frame_ids = get_frame_ids(iteration * 60, min((iteration + 1) * 60, total_frames), num_segments=num_segments,
+                                          jitter=False)
+                frames = video_loader_by_frames('./', video_path, frame_ids)
 
-        print('-----------------')
-        for i in range(num_return_sequences):
-            generated_text_str = decode_one(generated_text_ids[i], tokenizer)
-            narrations.append(generated_text_str)
-            print('{}: {}'.format(i, generated_text_str))
+                frames = val_transform(frames)
+                frames = frames.unsqueeze(0)  # fake a batch dimension
 
-    with open(output_path, 'w') as f:
-        for narration in narrations:
-            f.write(narration + '\n')
+                tokenizer = MyGPT2Tokenizer('gpt2-xl', add_bos=True)
+                with torch.no_grad():
+                    if args.cuda:
+                        frames = frames.cuda(non_blocking=True)
+                    image_features = model.encode_image(frames)
+                    generated_text_ids, ppls = model.generate(
+                        image_features,
+                        tokenizer,
+                        target=None,  # free-form generation
+                        max_text_length=77,
+                        top_k=None,
+                        top_p=0.95,  # nucleus sampling
+                        num_return_sequences=num_return_sequences,  # number of candidates: 10
+                        temperature=0.7,
+                        early_stopping=True,
+                    )
+
+                print('-----------------')
+                for i in range(num_return_sequences):
+                    generated_text_str = decode_one(generated_text_ids[i], tokenizer)
+                    narrations.append(generated_text_str)
+                    print('{}: {}'.format(i, generated_text_str))
+
+            with open(output_path, 'w') as f:
+                for narration in narrations:
+                    f.write(narration + '\n')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('lavila narrator demo')
     parser.add_argument('--cuda', action='store_true', help='use cuda')
     parser.add_argument('--input_directory_path', default='/data/ANNOTATION', type=str, help='input directory path')
-    parser.add_argument('--recording_id', default='12_5', type=str, help='input video path')
+    parser.add_argument('--activity_id', default='8', type=str, help='activity_id')
     parser.add_argument('--output_directory_path', default='narrations.txt', type=str, help='output path')
     args = parser.parse_args()
     main(args)

@@ -6,7 +6,7 @@
 
 import csv
 
-from lavila.models.tokenizer import MyBertTokenizer, MyDistilBertTokenizer, MyGPT2Tokenizer, SimpleTokenizer
+from benchmarks.zero_shot_error_detection.lavila.lavila.models.tokenizer import MyBertTokenizer, MyDistilBertTokenizer, MyGPT2Tokenizer, SimpleTokenizer
 
 
 def generate_label_map(dataset):

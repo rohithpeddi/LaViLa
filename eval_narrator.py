@@ -24,10 +24,10 @@ import torchvision.transforms._transforms_video as transforms_video
 
 from benchmarks.zero_shot_error_detection.lavila.lavila.data import datasets
 from benchmarks.zero_shot_error_detection.lavila.lavila.data.video_transforms import Permute, SpatialCrop, TemporalCrop
-from lavila.models import models
-from lavila.models.utils import inflate_positional_embeds
-from lavila.utils import distributed as dist_utils
-from lavila.utils.preprocess import generate_tokenizer
+from benchmarks.zero_shot_error_detection.lavila.lavila.models import models
+from benchmarks.zero_shot_error_detection.lavila.lavila.models.utils import inflate_positional_embeds
+from benchmarks.zero_shot_error_detection.lavila.lavila.utils import distributed as dist_utils
+from benchmarks.zero_shot_error_detection.lavila.lavila.utils.preprocess import generate_tokenizer
 
 
 def decode_one(generated_ids, tokenizer):
