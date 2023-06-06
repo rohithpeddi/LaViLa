@@ -61,16 +61,26 @@ def main(args):
                                         std=[68.5005327, 66.6321579, 70.32316305])
     ])
 
+    video_path = os.path.join(args.input_directory_path, f'{args.recording_id}_360p.mp4')
+    if os.path.exists(video_path):
+        print(f'video path: {video_path} exists')
+    else:
+        print(f'video path: {video_path} does not exist')
+        video_path = os.path.join(args.input_directory_path, f'{args.recording_id}_360p.MP4')
     narrations = []
-    vr = decord.VideoReader(args.video_path)
+    vr = decord.VideoReader(video_path)
     total_frames = len(vr)
     num_segments = 4
-    num_return_sequences = 5
+    num_return_sequences = 10
     total_iterations = total_frames // 60
+
+    os.makedirs(args.output_directory_path, exist_ok=True)
+    output_path = os.path.join(args.output_directory_path, f'{args.recording_id}.txt')
     for iteration in range(total_iterations):
         print('iteration {}/{}'.format(iteration, total_iterations))
-        frame_ids = get_frame_ids(iteration * 60, min((iteration + 1) * 60, total_frames), num_segments=num_segments, jitter=False)
-        frames = video_loader_by_frames('./', args.video_path, frame_ids)
+        frame_ids = get_frame_ids(iteration * 60, min((iteration + 1) * 60, total_frames), num_segments=num_segments,
+                                  jitter=False)
+        frames = video_loader_by_frames('./', video_path, frame_ids)
 
         frames = val_transform(frames)
         frames = frames.unsqueeze(0)  # fake a batch dimension
@@ -98,11 +108,16 @@ def main(args):
             narrations.append(generated_text_str)
             print('{}: {}'.format(i, generated_text_str))
 
+    with open(output_path, 'w') as f:
+        for narration in narrations:
+            f.write(narration + '\n')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('lavila narrator demo')
     parser.add_argument('--cuda', action='store_true', help='use cuda')
-    parser.add_argument('--video-path', default='/home/rxp190007/DATA/ANNOTATION/12_2/12_2_360p.mp4', type=str,
-                        help='video path')
+    parser.add_argument('--input_directory_path', default='/data/ANNOTATION', type=str, help='input directory path')
+    parser.add_argument('--recording_id', default='12_5', type=str, help='input video path')
+    parser.add_argument('--output_directory_path', default='narrations.txt', type=str, help='output path')
     args = parser.parse_args()
     main(args)
